@@ -19,9 +19,9 @@
                     </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="/register">Logout</a>
+                        <a class="nav-link" href="/logout">Logout</a>
                     </li>                    
-                    {% comment %} {% else %} {% endcomment %}
+                    {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="/login">Login</a>
                     </li>
