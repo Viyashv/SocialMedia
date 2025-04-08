@@ -1,5 +1,78 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %} {% include "navbar.html" %}
-<h1>Register page</h1>
+<div class="container-fluid bg-secondary">
+    <!-- Center the form horizontally and add some top spacing -->
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-5">
+            <div class="card my-5 shadow">
+                <div class="card-body">
+                    <h3 class="card-title text-center mb-4">Register</h3>
+                    <form class="mb-md-2 mt-md-4 pb-3 needs-validation text-center" method="POST" novalidate>
+                        {% csrf_token %}
+                        <p class="mb-5">Please enter your Valid Data</p>
+                        <!-- First Name field -->
+                        <div data-mdb-input-init class="form-outline form-white mb-4 form-floating">
+                            <input type="text" id="typeEmailX" name="firstName" class="form-control form-control-lg"
+                                placeholder="" required pattern="[a-zA-Z]+" />
+                            <label class="form-label" for="typeEmailX">First name</label>
+                            <div class="invalid-feedback">
+                                Please enter a valid First Name.
+                            </div>
+                        </div>
+                        <!-- Last Name -->
+                        <div data-mdb-input-init class="form-outline form-white mb-4 form-floating">
+                            <input type="text" id="typeEmailX" name="lastName" class="form-control form-control-lg"
+                                placeholder="" required pattern="[a-zA-Z]+" />
+                            <label class="form-label" for="typeEmailX">Last Name</label>
+                            <div class="invalid-feedback">
+                                Please enter a valid Last Name.
+                            </div>
+                        </div>
+                        <!-- User name field -->
+                        <div data-mdb-input-init class="form-outline form-white mb-4 form-floating">
+                            <input type="text" id="typeEmailX" name="username" class="form-control form-control-lg"
+                                placeholder="" required pattern="[a-zA-Z]+" />
+                            <label class="form-label" for="typeEmailX">User Name</label>
+                            <div class="invalid-feedback">
+                                Please enter a valid User Name.
+                            </div>
+                        </div>
+                        <!-- Email field -->
+                        <div data-mdb-input-init class="form-outline form-white mb-4 form-floating">
+                            <input type="email" id="typeEmailX" name="email" class="form-control form-control-lg"
+                                placeholder="" required />
+                            <label class="form-label" for="typeEmailX">Email</label>
+                            <div class="invalid-feedback">
+                                Please enter a valid User Email.
+                            </div>
+                        </div>
+                        <!-- Password field -->
+                        <div>
+                            <div data-mdb-input-init
+                                class="form-outline form-white mb-4 form-floating d-flex border-1 border rounded-3">
+                                <input type="password" id="pass2" name="password"
+                                    class="form-control form-control-lg border-0 rounded-bottom-end" placeholder=""
+                                    required />
+                                <label class="form-label" for="password">Password</label>
+                                <div class="bg-white text-dark p-3 rounded-3 rounded-top-start" id="btn">
+                                    <i class="bi bi-eye" id="toggleIcon1"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-dark btn-lg px-5"
+                            type="submit">Register</button>
+
+                    </form>
+                    <div class="text-center">
+                        <p class="mb-0">Have an account? <a href="/login" class="fw-bold">Sign In</a>
+                        </p>
+                    </div>
+                </div> <!-- /.card-body -->
+            </div> <!-- /.card -->
+        </div> <!-- /.col -->
+    </div> <!-- /.row -->
+</div> <!-- /.container -->
+<script src="{% static '/logic.js' %}"></script>
 {% endblock %}

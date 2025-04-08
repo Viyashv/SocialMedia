@@ -9,7 +9,7 @@
                         <form class="mb-md-5 mt-md-4 pb-5 needs-validation" method="POST" novalidate>
                             {% csrf_token %}
                             <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
-                            <p class="text-white-50 mb-5">Please enter your login and password!</p>
+                            <p class="text-white-50 mb-5">Please enter your username and password!</p>
 
                             <div data-mdb-input-init class="form-outline form-white mb-4 form-floating">
                                 <input type="text" id="typeEmailX" name="userName" class="form-control form-control-lg"
@@ -50,19 +50,5 @@
         </div>
     </div>
 </section>
-{% if message %}
-<div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            <img src="..." class="rounded me-2" alt="...">
-            <strong class="me-auto">Bootstrap</strong>
-            <small>11 mins ago</small>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-            Hello, world! This is a toast message.
-        </div>
-    </div>
-</div>
-{% endif %}
+
 {% endblock %}
