@@ -3,12 +3,25 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate , logout,login     
 from .models import *
 from django.db.models import Q
+import requests
 # Create your views here.
 
 def Home(request):
     """Get all the user"""
-    users = CustomUser.objects.all()
-    return render(request, 'home.html', {"data":users})
+    try:
+        response = requests.get('https://dummyjson.com/posts?limit=20')
+        response.raise_for_status()  # Raises an HTTPError if the response status is 4xx, 5xx
+
+        # Parse the JSON data
+        data = response.json()
+        posts = data['posts']
+        # Print the data (or process it as needed)
+        return render(request, 'home.html', {"posts":posts})
+    except requests.exceptions.HTTPError as http_err:
+        print(f"HTTP error occurred: {http_err}")
+    except Exception as err:
+        print(f"An error occurred: {err}")
+    return render(request, 'home.html', )
 
 
 def registerUser(request):
