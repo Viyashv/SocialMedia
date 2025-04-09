@@ -12,7 +12,7 @@
                 <div class="row">
                     <div class="col-12 text-center">
                         <!-- Profile image placeholder -->
-                        <img src="https://via.placeholder.com/120" alt="Profile Picture" class="rounded-circle mb-3"
+                        <img src="{{user.image.url}}" alt="Profile Picture" class="rounded-circle mb-3"
                             width="120" height="120" />
                         <!-- Username -->
                         <h2 class="fw-bold">{{user.username}}</h2>
@@ -29,7 +29,7 @@
             </div>
 
             <!-- Posts / Saved / Tagged Tabs -->
-            <div class="container">
+            <div class="container-fluid">
                 <ul class="nav nav-pills justify-content-center mb-3" id="pills-tab">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="pills-posts-tab" data-bs-toggle="pill"
@@ -60,10 +60,11 @@
                         <!-- Posts grid or whatever you want to display -->
                         <div class="row">
                             <!-- Example placeholders for posts -->
-                             
+                             {%for i in data %}
                             <div class="col-6 col-md-3 mb-4">
-                                <img src="https://via.placeholder.com/250" alt="Post 1" class="img-fluid" />
+                                <img src="{{ i.images.url }}" alt="Post 1" class="img-fluid" />
                             </div>
+                            {% endfor %}
                             <!-- Add more as needed -->
                         </div>
                     </div>
