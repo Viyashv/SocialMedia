@@ -79,4 +79,4 @@ def usereProfiile(request):
     userPost = Post.objects.filter(user = user)
     print(f"Counts of lIkes in post 1 :- {userPost[0].likes.count()}")
     print(f"Counts of lIkes in post 2 :- {userPost[1].likes.count()}")
-    return render(request , "profile.html")
+    return render(request , "profile.html" , {"data":userPost})
