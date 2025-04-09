@@ -1,19 +1,53 @@
 .gradient-custom {
     /* fallback for old browsers */
     background: #6a11cb;
-    
+
     /* Chrome 10-25, Safari 5.1-6 */
     background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
-    
+
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))
-    }
+}
 
-.rounded-bottom-end{
+.rounded-bottom-end {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
 }
-.rounded-top-start{
+
+.rounded-top-start {
     border-top-left-radius: 0 !important;
-    border-bottom-left-radius: 0!important;
+    border-bottom-left-radius: 0 !important;
+}
+
+/* +++++++++=====================================Base sidebar style with a transition for smooth effect================================================= */
+.sidebar {
+    transition: width 0.3s;
+    width: 250px;
+}
+
+@media screen and (max-width: 909px) {
+    .auto-hide {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+
+    /* Collapsed sidebar style (only icons displayed) */
+    .sidebar.collapsed {
+        width: 70px;
+    }
+
+    /* Hide text labels when sidebar is collapsed */
+    .sidebar.collapsed .nav-link span {
+        display: none;
+    }
+
+    /* Adjust icon margin when collapsed (centered) */
+    .sidebar.collapsed .nav-link i {
+        margin-right: 0;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
 }

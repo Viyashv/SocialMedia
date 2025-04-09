@@ -4,8 +4,10 @@ from django.contrib.auth import authenticate , logout,login
 from .models import *
 from django.db.models import Q
 import requests
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
+@login_required(login_url="login")
 def Home(request):
     """Get all the user"""
     try:
@@ -68,3 +70,13 @@ def logoutUser(request):
     messages.warning(request , "You are logout")
     logout(request)
     return redirect('login')
+
+
+@login_required(login_url="login")
+def usereProfiile(request):
+    user = request.user
+    print(user)
+    userPost = Post.objects.filter(user = user)
+    print(f"Counts of lIkes in post 1 :- {userPost[0].likes.count()}")
+    print(f"Counts of lIkes in post 2 :- {userPost[1].likes.count()}")
+    return render(request , "profile.html")

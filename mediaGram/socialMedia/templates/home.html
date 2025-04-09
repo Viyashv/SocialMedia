@@ -1,36 +1,16 @@
-{% extends 'base.html' %}{% block content %} {% include "navbar.html" %}
+{% extends 'base.html' %}{% block content %}
 <div class="container-fluid">
     <div class="row min-vh-100">
         <!-- Sidebar -->
-        <div class="col-2 border-end d-flex flex-column p-3">
-            <ul class="nav flex-column gap-3">
-                <li><a href="#" class="nav-link"><i class="bi bi-house"></i> Home</a></li>
-                <li><a href="#" class="nav-link"><i class="bi bi-search"></i> Search</a></li>
-                <li><a href="#" class="nav-link"><i class="bi bi-globe"></i> Explore</a></li>
-                <li><a href="#" class="nav-link">🎬 Reels</a></li>
-                <li><a href="#" class="nav-link"><i class="bi bi-chat-right"></i> Messages <span class="badge bg-danger ms-1">7</span></a></li>
-                <li><a href="#" class="nav-link"><i class="bi bi-heart-fill"></i> Notifications</a></li>
-                <li><a href="#" class="nav-link">➕ Create</a></li>
-                <li><a href="#" class="nav-link"><i class="bi bi-person"></i> Profile</a></li>
-                <li><a href="#" class="nav-link"><i class="bi bi-chat"></i> Threads</a></li>
-                <li><a href="#" class="nav-link"><i class="bi bi-sliders"></i> More</a></li>
-            </ul>
-        </div>
+        {% include 'sidebar.html' %}
 
         <!-- Main Feed -->
-        <div class="col-7 p-4">
+        <div class="p-4 col-lg-6">
             <!-- Stories Row -->
             <div class="d-flex gap-3 overflow-auto mb-4">
-                <img src="https://via.placeholder.com/60" class="rounded-circle border border-2 border-danger"
-                    alt="story">
-                <img src="https://via.placeholder.com/60" class="rounded-circle border border-2 border-danger"
-                    alt="story">
-                <img src="https://via.placeholder.com/60" class="rounded-circle border border-2 border-danger"
-                    alt="story">
-                <img src="https://via.placeholder.com/60" class="rounded-circle border border-2 border-danger"
-                    alt="story">
-                <img src="https://via.placeholder.com/60" class="rounded-circle border border-2 border-danger"
-                    alt="story">
+                <div class="rounded-circle border border-2 border-danger p-2">
+                    <i class="bi bi-person"></i>
+                </div>
             </div>
 
             <!-- Post -->
@@ -59,7 +39,7 @@
         </div>
 
         <!-- Right Sidebar -->
-        <div class="col-3 p-4">
+        <div class="col-3 p-4 auto-hide">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <div>
                     <strong>v_i_y_a_s_h</strong><br>

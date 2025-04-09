@@ -43,3 +43,28 @@ const toastElList = document.querySelectorAll(".toast");
 const toastList = [...toastElList].map(
   (toastEl) => new bootstrap.Toast(toastEl, option)
 );
+
+// Toggle the "collapsed" class on the sidebar when clicking the button
+// Manual toggle button for demo purposes; toggles sidebar collapsed state.
+function sideBar() {
+  document.getElementById("sidebar").classList.toggle("collapsed");
+};
+
+// Function to check if the sidebar's content overflows the visible area.
+function checkSidebarOverflow() {
+  const sidebar = document.getElementById("sidebar");
+
+  // Calculate whether the inner content overflows vertically.
+  if (sidebar.scrollHeight > sidebar.clientHeight) {
+    // If it overflows, ensure that the sidebar is in its collapsed state.
+    sidebar.classList.add("collapsed");
+  } else {
+    // Otherwise, you can optionally remove the collapsed state.
+    // If you want auto expand when content fits, uncomment the next line.
+    sidebar.classList.remove('collapsed');
+  }
+}
+
+// Run overflow check on window resize and initial load.
+window.addEventListener("resize", checkSidebarOverflow);
+window.addEventListener("load", checkSidebarOverflow);

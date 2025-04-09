@@ -1,0 +1,91 @@
+{% extends "base.html" %} {% block content %}
+<!-- Main container to hold sidebar + content -->
+<div class="container-fluid">
+    <div class="row min-vh-100">
+        <!-- Your sidebar code goes here -->
+        {% include "sidebar.html" %}
+
+        <!-- Main Content -->
+        <section class="col-12 col-md-10 col-lg-10">
+            <!-- Profile Header Section -->
+            <div class="container my-4">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <!-- Profile image placeholder -->
+                        <img src="https://via.placeholder.com/120" alt="Profile Picture" class="rounded-circle mb-3"
+                            width="120" height="120" />
+                        <!-- Username -->
+                        <h2 class="fw-bold">{{user.username}}</h2>
+                        <!-- Basic stats -->
+                        <p>
+                            <strong>4</strong> posts |
+                            <strong>56</strong> followers |
+                            <strong>58</strong> following
+                        </p>
+                        <!-- Additional info or buttons -->
+                            <a href="#" class="btn btn-outline-dark btn-sm">Edit profile</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Posts / Saved / Tagged Tabs -->
+            <div class="container">
+                <ul class="nav nav-pills justify-content-center mb-3" id="pills-tab">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="pills-posts-tab" data-bs-toggle="pill"
+                            data-bs-target="#pills-posts" type="button" role="tab" aria-controls="pills-posts"
+                            aria-selected="true">
+                            Posts
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-saved-tab" data-bs-toggle="pill"
+                            data-bs-target="#pills-saved" type="button" role="tab" aria-controls="pills-saved"
+                            aria-selected="false">
+                            Saved
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-tagged-tab" data-bs-toggle="pill"
+                            data-bs-target="#pills-tagged" type="button" role="tab" aria-controls="pills-tagged"
+                            aria-selected="false">
+                            Tagged
+                        </button>
+                    </li>
+                </ul>
+                <!-- Tab Content -->
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-posts" role="tabpanel"
+                        aria-labelledby="pills-posts-tab">
+                        <!-- Posts grid or whatever you want to display -->
+                        <div class="row">
+                            <!-- Example placeholders for posts -->
+                            <div class="col-6 col-md-3 mb-4">
+                                <img src="https://via.placeholder.com/250" alt="Post 1" class="img-fluid" />
+                            </div>
+                            <div class="col-6 col-md-3 mb-4">
+                                <img src="https://via.placeholder.com/250" alt="Post 2" class="img-fluid" />
+                            </div>
+                            <div class="col-6 col-md-3 mb-4">
+                                <img src="https://via.placeholder.com/250" alt="Post 3" class="img-fluid" />
+                            </div>
+                            <div class="col-6 col-md-3 mb-4">
+                                <img src="https://via.placeholder.com/250" alt="Post 4" class="img-fluid" />
+                            </div>
+                            <!-- Add more as needed -->
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-saved" role="tabpanel" aria-labelledby="pills-saved-tab">
+                        <!-- Saved items -->
+                        <p class="text-center">Saved items go here...</p>
+                    </div>
+                    <div class="tab-pane fade" id="pills-tagged" role="tabpanel" aria-labelledby="pills-tagged-tab">
+                        <!-- Tagged items -->
+                        <p class="text-center">Tagged items go here...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}
