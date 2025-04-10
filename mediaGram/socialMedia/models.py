@@ -6,7 +6,7 @@ class Post(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts')
     caption = models.TextField(blank=True , null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
-    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_posts', blank=True)
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_posts',blank=True)
     image = models.ImageField(upload_to="upload/post" ,null=True ,blank=True)
 
     class Meta:

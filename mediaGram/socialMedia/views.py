@@ -68,7 +68,7 @@ def loginUser(request):
 def logoutUser(request):
     """Logout the user"""
     messages.warning(request , "You are logout")
-    logout(request)
+    logout(request)    
     return redirect('login')
 
 
@@ -76,7 +76,8 @@ def logoutUser(request):
 def usereProfiile(request):
     user = request.user
     print(user)
-    userPost = Post.objects.filter(user = user)
-    print(f"Counts of lIkes in post 1 :- {userPost[0].likes.count()}")
-    print(f"Counts of lIkes in post 2 :- {userPost[1].likes.count()}")
-    return render(request , "profile.html" , {"data":userPost})
+    context ={}
+    context["false_conversations_count"] = user.conversations.filter(status=False).count()
+    context["true_conversations_count"] = user.conversations.filter(status=True).count()
+    context["data"] = Post.objects.filter(user = user)
+    return render(request , "profile.html" ,context)
