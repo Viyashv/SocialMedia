@@ -1,15 +1,31 @@
 from django.db import models
 from django.conf import settings
-from django.contrib.auth.models import User , AbstractUser
+from django.contrib.auth.models import AbstractUser
 # Create your models here.
 class Post(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts')
-    caption = models.TextField()
+    caption = models.TextField(blank=True , null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
-    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_posts', blank=True ,null=True)
-    images = models.ImageField(upload_to="upload/post")
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_posts', blank=True)
+    image = models.ImageField(upload_to="upload/post" ,null=True ,blank=True)
+
+    class Meta:
+        ordering = ['-timestamp']
+
     def __str__(self):
-        return self.user.username 
+        return f"Post {self.id} by {self.user.username}"
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-timestamp']
+
+    def __str__(self):
+        return f"Comment by {self.user} on {self.post}" 
 
 class CustomUser(AbstractUser):
     """
@@ -33,6 +49,9 @@ class Conversation(models.Model):
     participants = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='conversations')
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.BooleanField(default=False)
+    
+    class Meta:
+        ordering = ['-created_at']  
 
     def __str__(self):
         return f"Conversation {self.pk} with {', '.join(user.username for user in self.participants.all())}"
@@ -46,6 +65,9 @@ class Message(models.Model):
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['timestamp']
 
     def __str__(self):
         return f"Message from {self.sender.username} at {self.timestamp}"

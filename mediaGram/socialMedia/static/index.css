@@ -51,3 +51,44 @@
         width: 100%;
     }
 }
+
+/* =======================================================  =   =   =   ==  =   =========== */
+
+/* For Chrome, Safari, and Opera */
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* For IE, Edge and Firefox */
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+/* ================================================================================== */
+/* Ensure the HTML and body fill the viewport */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* This container already spans full height via min-vh-100 */
+  .container-fluid .row {
+    overflow: hidden; /* Prevent the entire row from scrolling */
+  }
+  
+  /* Main feed container: make it scrollable */
+  .main-feed {
+    height: 100vh;      /* Full viewport height */
+    overflow-y: auto;   /* Enable vertical scroll */
+  }
+  
+  /* Sidebars may remain as they are or be fixed if you wish. For example: */
+  .sidebar,
+  .right-sidebar {
+    height: 100vh;
+    overflow: hidden;   /* Disable scrolling on sidebars */
+  }

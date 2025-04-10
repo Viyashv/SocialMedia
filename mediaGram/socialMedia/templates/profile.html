@@ -12,18 +12,17 @@
                 <div class="row">
                     <div class="col-12 text-center">
                         <!-- Profile image placeholder -->
-                        <img src="{{user.image.url}}" alt="Profile Picture" class="rounded-circle mb-3"
-                            width="120" height="120" />
+                        <img src="{{user.image.url}}" alt="Profile Picture" class="rounded-circle mb-3" width="120"
+                            height="120" />
                         <!-- Username -->
                         <h2 class="fw-bold">{{user.username}}</h2>
                         <!-- Basic stats -->
                         <p>
-                            <strong>4</strong> posts |
-                            <strong>56</strong> followers |
+                            <strong>4</strong> posts | <strong>56</strong> followers |
                             <strong>58</strong> following
                         </p>
                         <!-- Additional info or buttons -->
-                            <a href="#" class="btn btn-outline-dark btn-sm">Edit profile</a>
+                        <a href="#" class="btn btn-outline-dark btn-sm">Edit profile</a>
                     </div>
                 </div>
             </div>
@@ -60,10 +59,52 @@
                         <!-- Posts grid or whatever you want to display -->
                         <div class="row">
                             <!-- Example placeholders for posts -->
-                             {%for i in data %}
-                            <div class="col-6 col-md-3 mb-4">
-                                <img src="{{ i.images.url }}" alt="Post 1" class="img-fluid" />
+                            {%for i in data %}
+                            <div class="col-6 col-md-3 p-0">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#postModal{{ i.id }}">
+                                    <img src="{{ i.image.url }}" alt="Post {{i.id}}"
+                                        class="img-fluid object-fit-cover"
+                                        style="width: 100% !important; height: auto !important" />
+                                </a>
                             </div>
+                            <!-- Modal for each post -->
+                            <div class="modal fade" id="postModal{{ i.id }}" tabindex="-1"
+                                aria-labelledby="postModalLabel{{ i.id }}" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                    <div class="modal-content">
+                                        <!-- Modal header -->
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="postModalLabel{{ i.id }}">
+                                                <!-- Optionally, display a title if you have one in your data object -->
+                                                {{ i.user.username | default:"Post Title" }}
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+
+                                        <!-- Modal body -->
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <!-- Larger version of the post image -->
+                                                    <img src="{{ i.image.url }}" alt="Post {{ i.id }}"
+                                                        class="img-fluid" />
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <!-- Example content. Replace with your actual data fields as needed. -->
+                                                    <h2>{{ i.user.username|default:"Title" }}</h2>
+                                                    <p>
+                                                        {{ i.caption | default:"Lorem ipsum dolor sitamet..." }}
+                                                    </p>
+
+                                                    <!-- You could also include additional data, comments, likes, etc. -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End of modal -->
                             {% endfor %}
                             <!-- Add more as needed -->
                         </div>
