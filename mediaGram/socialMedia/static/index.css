@@ -39,16 +39,18 @@
     }
 
     /* Hide text labels when sidebar is collapsed */
-    .sidebar.collapsed .nav-link span {
-        display: none;
+    .sidebar .nav-link span {
+        display: none !important;
     }
 
-    /* Adjust icon margin when collapsed (centered) */
-    .sidebar.collapsed .nav-link i {
-        margin-right: 0;
-        display: flex;
-        justify-content: center;
-        width: 100%;
+    /* Center icons */
+    .sidebar .nav-link {
+        justify-content: center !important;
+    }
+
+    .sidebar .nav-link i,
+    .sidebar .nav-link svg {
+        margin-right: 0 !important;
     }
 }
 
@@ -69,26 +71,35 @@
 
 /* ================================================================================== */
 /* Ensure the HTML and body fill the viewport */
-html, body {
+html,
+body {
     height: 100%;
     margin: 0;
     padding: 0;
-  }
-  
-  /* This container already spans full height via min-vh-100 */
-  .container-fluid .row {
-    overflow: hidden; /* Prevent the entire row from scrolling */
-  }
-  
-  /* Main feed container: make it scrollable */
-  .main-feed {
-    height: 100vh;      /* Full viewport height */
-    overflow-y: auto;   /* Enable vertical scroll */
-  }
-  
-  /* Sidebars may remain as they are or be fixed if you wish. For example: */
-  .sidebar,
-  .right-sidebar {
+}
+
+/* This container already spans full height via min-vh-100 */
+.container-fluid .row {
+    overflow: hidden;
+    /* Prevent the entire row from scrolling */
+}
+
+/* Main feed container: make it scrollable */
+.main-feed {
     height: 100vh;
-    overflow: hidden;   /* Disable scrolling on sidebars */
-  }
+    /* Full viewport height */
+    overflow-y: auto;
+    /* Enable vertical scroll */
+}
+
+/* Sidebars may remain as they are or be fixed if you wish. For example: */
+.sidebar,
+.right-sidebar {
+    height: 100vh;
+    overflow: hidden;
+    /* Disable scrolling on sidebars */
+}
+
+.w-max-content {
+    width: max-content !important;
+}
