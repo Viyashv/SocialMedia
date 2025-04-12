@@ -34,7 +34,7 @@
 @media screen and (max-width: 1000px) {
 
     /* Collapsed sidebar style (only icons displayed) */
-    .sidebar.collapsed {
+    .sidebar{
         width: 70px;
     }
 
@@ -96,10 +96,13 @@ body {
 .sidebar,
 .right-sidebar {
     height: 100vh;
-    overflow: hidden;
     /* Disable scrolling on sidebars */
 }
 
 .w-max-content {
     width: max-content !important;
+}
+.comment-sec {
+    height: 8rem !important;
+    overflow-y: auto !important;
 }

@@ -16,14 +16,16 @@
                         <img src="{{user.image.url}}" alt="Profile Picture" class="rounded-circle mb-3" width="120"
                             height="120" />
                         {% else %}
-                        <img src="{% static 'placeholder/placeholder.jpg' %}" alt="..." class="rounded-circle mb-3" width="120"
-                        height="120" >
+                        <img src="{% static 'placeholder/placeholder.jpg' %}" alt="..." class="rounded-circle mb-3"
+                            width="120" height="120" />
                         {% endif %}
                         <!-- Username -->
                         <h2 class="fw-bold">{{user.username}}</h2>
                         <!-- Basic stats -->
                         <p>
-                            <strong>{{data.count}}</strong> posts | <strong>{{ false_conversations_count }}</strong> followers |
+                            <strong>{{data.count}}</strong> posts |
+                            <strong>{{ false_conversations_count }}</strong>
+                            followers |
                             <strong>{{true_conversations_count}}</strong> following
                         </p>
                         <!-- Additional info or buttons -->
@@ -59,56 +61,57 @@
                 </ul>
                 <!-- Tab Content -->
                 <div class="tab-content" id="pills-tabContent">
+                    {% if data.count > 0 %} 
+
                     <div class="tab-pane fade show active" id="pills-posts" role="tabpanel"
                         aria-labelledby="pills-posts-tab">
                         <!-- Posts grid or whatever you want to display -->
                         <div class="row">
                             <!-- Example placeholders for posts -->
-                            {%for i in data %}
+                            {% for i in data %}
                             <div class="col-6 col-md-3 p-0">
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#postModal{{ i.id }}">
-                                    <img src="{{ i.image.url }}" alt="Post {{i.id}}" class="img-fluid object-fit-cover"
-                                        style="width: 100% !important; height: auto !important" />
+                                    <img src="{{ i.image.url }}" alt="Post {{i.id}}" class="img-fluid"
+                                        style="width: 100% !important; height:-webkit-fill-available !important" />
                                 </a>
                             </div>
                             <!-- Modal for each post -->
                             <div class="modal fade" id="postModal{{ i.id }}" tabindex="-1"
                                 aria-labelledby="postModalLabel{{ i.id }}" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered modal-lg">
-                                    <div class="modal-content">
-                                        <!-- Modal header -->
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="postModalLabel{{ i.id }}">
-                                                <!-- Optionally, display a title if you have one in your data object -->
-                                                {{ i.user.username | default:"Post Title" }}
-                                            </h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-
+                                    <div class="modal-content bg-transparent border-0">
                                         <!-- Modal body -->
                                         <div class="modal-body">
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 p-0 ratio ratio-16x9">
                                                     <!-- Larger version of the post image -->
                                                     <img src="{{ i.image.url | default:'...' }}" alt="Post {{ i.id }}"
-                                                        class="img-fluid" />
+                                                        class="img-fluid" style="object-fit: cover;" />
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 bg-secondary">
+                                                     <!-- Modal header -->
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="postModalLabel{{ i.id }}">
+                                                            <!-- Optionally, display a title if you have one in your data object -->
+                                                            {{ i.user.username | default:"Post Title" }}
+                                                        </h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
                                                     <!-- Example content. Replace with your actual data fields as needed. -->
-                                                    <strong>{{ i.user.username|default:"Title" }} </strong>
+                                                    <strong>{{ i.user.username|default:"Title" }}
+                                                    </strong>
                                                     <span>
-                                                        &nbsp; {{ i.caption | default:"Lorem ipsum dolor sitamet..." }}
+                                                        &nbsp; {{ i.caption | default:"Lorem ipsum dolorsitamet..." }}
                                                     </span>
-
                                                     <!-- Comments Section -->
-                                                    <div class="comments-section">
-                                                        <h4>Comments</h4>
+                                                    <div class="comments-section comment-sec">
                                                         {% for comment in i.comments.all %}
-                                                        <div class="comment mb-2">
-                                                            <strong>{{ comment.user.username }}</strong> &nbsp;
+                                                        <div class="comment">
+                                                            <strong>{{ comment.user.username }}</strong>
+                                                            &nbsp;:
                                                             <span>{{ comment.content }}</span>
-                                                            <div class="text-muted" style="font-size: 0.8em;">
+                                                            <div class="text-muted" style="font-size: 0.8em">
                                                                 {{ comment.timestamp|date:"M d" }}
                                                             </div>
                                                         </div>
@@ -129,13 +132,19 @@
                             <!-- Add more as needed -->
                         </div>
                     </div>
+                    {% else %}
+                    <div class="tab-pane fade" id="pills-posts" role="tabpanel" aria-labelledby="pills-posts-tab">
+                        <!-- Saved items -->
+                        <p class="text-center">No Posts</p>
+                    </div>
+                    {% endif %}
                     <div class="tab-pane fade" id="pills-saved" role="tabpanel" aria-labelledby="pills-saved-tab">
                         <!-- Saved items -->
-                        <p class="text-center">Saved items go here...</p>
+                        <p class="text-center">No Saved items...</p>
                     </div>
                     <div class="tab-pane fade" id="pills-tagged" role="tabpanel" aria-labelledby="pills-tagged-tab">
                         <!-- Tagged items -->
-                        <p class="text-center">Tagged items go here...</p>
+                        <p class="text-center">No Tagged items...</p>
                     </div>
                 </div>
             </div>
