@@ -1,0 +1,56 @@
+<div class="modal fade" id="postModal{{ i.id }}" tabindex="-1"
+                                aria-labelledby="postModalLabel{{ i.id }}" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                    <div class="modal-content bg-transparent border-0">
+                                        <!-- Modal body -->
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-6 p-0">
+                                                    <!-- Larger version of the post image -->
+                                                    <img src="{{ i.image.url | default:'...' }}" alt="Post {{ i.id }}"
+                                                        class="img-fluid " style="height: -webkit-fill-available !important;" loading="lazy" />
+                                                </div>
+                                                <div class="col-md-6 bg-secondary">
+                                                     <!-- Modal header -->
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="postModalLabel{{ i.id }}">
+                                                            <!-- Optionally, display a title if you have one in your data object -->
+                                                            {{ i.user.username | default:"Post Title" }}
+                                                        </h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <!-- Example content. Replace with your actual data fields as needed. -->
+                                                    <strong>{{ i.user.username|default:"Title" }}
+                                                    </strong>
+                                                    <span>
+                                                        &nbsp; {{ i.caption | default:"Lorem ipsum dolorsitamet..." }}
+                                                    </span>
+                                                    <!-- Comments Section -->
+                                                    <div class="comments-section comment-sec">
+                                                        {% for comment in i.comments.all %}
+                                                        <div class="comment">
+                                                            <strong>{{ comment.user.username }}</strong>
+                                                            &nbsp;:
+                                                            <span>{{ comment.content }}</span>
+                                                            <div class="text-muted" style="font-size: 0.8em">
+                                                                {{ comment.timestamp|date:"M d" }}
+                                                            </div>
+                                                        </div>
+                                                        {% empty %}
+                                                        <p>No comments yet.</p>
+                                                        {% endfor %}
+                                                    </div>
+                                                    <form method="POST" class="d-flex pb-2" action="{% url 'comment' %}?username={{ user.username }}&post_id={{ i.id }}">
+                                                        {% csrf_token %}
+                                                        <input class="form-control" id="comment" name="comment" rows="1" placeholder="Add a comment..." />
+                                                        <button type="submit" class="btn btn-primary">Post</button>
+                                                    </form>
+
+                                                    <!-- You could also include additional data, comments, likes, etc. -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>

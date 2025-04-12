@@ -1,7 +1,7 @@
 <div class="d-flex p-0 justify-content-between">
     <!-- Sidebar -->
-    <div class="sidebar border-end d-flex flex-column pe-3">
-        <ul class="nav flex-column gap-3 justify-content-center mt-4 pe-3">
+    <div class="sidebar border-end d-flex flex-column px-2">
+        <ul class="nav flex-column gap-3 justify-content-center mt-4">
             <li class="w-max-content"><a href="/" class="nav-link d-flex align-items-center gap-3">
                     <i class="bi bi-house fs-4"></i> <span>Home</span>
                 </a></li>
@@ -29,8 +29,9 @@
             <li class="w-max-content"><a href="#" class="nav-link d-flex align-items-center gap-3">
                     <i class="bi bi-chat fs-4"></i> <span>Threads</span> 
                 </a></li>
-            <li class="nav-item dropdown dropup">
-                <a class="nav-link dropdown-toggle d-flex align-items-center gap-3" href="#" role="button" data-bs-toggle="dropdown"
+            </ul>
+            <div class="nav-link dropdown dropup mt-auto">
+                <a class="nav-link dropdown-toggle d-flex align-items-center gap-3 px-3" href="#" role="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
                     <i class="bi bi-list fs-4"></i> <span>More</span>
                 </a>
@@ -42,6 +43,5 @@
                     <li><a class="dropdown-item" href="{% url 'register' %}">Register</a></li>
                     {% endif %}
                 </ul>
-            </li>
-        </ul>
+            </div>
     </div>

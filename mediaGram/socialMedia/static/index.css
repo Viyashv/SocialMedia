@@ -103,6 +103,49 @@ body {
     width: max-content !important;
 }
 .comment-sec {
-    height: 8rem !important;
+    height: 24.5rem !important;
     overflow-y: auto !important;
 }
+
+
+
+/* ==================================================================================================== */
+
+
+
+
+.modal-80 {
+    /* Make the dialog 80% of the viewport width/height */
+    width: 90vw !important;
+    max-width: 90vw !important;
+    height: 90vh !important;
+    max-height: 90vh !important;
+  }
+  
+  .modal-80 .modal-content {
+    /* Ensure the modal content fills the entire dialog */
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* If you prefer scrolling, set overflow to auto */
+  }
+  
+  .modal-80 .modal-body {
+    /* Use flex to nicely split the left/right columns */
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .modal-80 .left-col,
+  .modal-80 .right-col {
+    /* Each col gets 50% of available space if you want an even split */
+    width: 50%;
+    height: 100%;
+  }
+  .modal-80 .left-col img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* preserve aspect ratio, show entire image */
+    display: block;
+  }

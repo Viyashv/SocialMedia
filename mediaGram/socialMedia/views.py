@@ -153,3 +153,11 @@ def usereProfiile(request):
     context["true_conversations_count"] = user.conversations.filter(status=True).count()
     context["data"] = Post.objects.filter(user = user)
     return render(request , "profile.html" ,context)
+
+def comment(request):
+    if request.method == 'POST':
+        post_id = request.GET.get('post_id')
+        comment = request.POST.get('comment')
+        user_userName = request.GET.get('username')
+        print(f"Post ID = {post_id} , comment = {comment} , username = {user_userName}")
+        return redirect('profile')

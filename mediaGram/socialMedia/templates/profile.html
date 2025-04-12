@@ -61,7 +61,7 @@
                 </ul>
                 <!-- Tab Content -->
                 <div class="tab-content" id="pills-tabContent">
-                    {% if data.count > 0 %} 
+                    {% if data.count > 0 %}
 
                     <div class="tab-pane fade show active" id="pills-posts" role="tabpanel"
                         aria-labelledby="pills-posts-tab">
@@ -71,62 +71,68 @@
                             {% for i in data %}
                             <div class="col-6 col-md-3 p-0">
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#postModal{{ i.id }}">
-                                    <img src="{{ i.image.url }}" alt="Post {{i.id}}" class="img-fluid"
+                                    <img src="{{ i.image.url }}" alt="Post {{i.id}}" class="img-fluid" loading="lazy"
                                         style="width: 100% !important; height:-webkit-fill-available !important" />
                                 </a>
                             </div>
                             <!-- Modal for each post -->
+                            <!-- Modal -->
                             <div class="modal fade" id="postModal{{ i.id }}" tabindex="-1"
                                 aria-labelledby="postModalLabel{{ i.id }}" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                <!-- Use our custom class here -->
+                                <div class="modal-dialog modal-dialog-centered modal-80">
                                     <div class="modal-content bg-transparent border-0">
-                                        <!-- Modal body -->
                                         <div class="modal-body">
-                                            <div class="row">
-                                                <div class="col-md-6 p-0 ratio ratio-16x9">
-                                                    <!-- Larger version of the post image -->
-                                                    <img src="{{ i.image.url | default:'...' }}" alt="Post {{ i.id }}"
-                                                        class="img-fluid" style="object-fit: cover;" />
-                                                </div>
-                                                <div class="col-md-6 bg-secondary">
-                                                     <!-- Modal header -->
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="postModalLabel{{ i.id }}">
-                                                            <!-- Optionally, display a title if you have one in your data object -->
-                                                            {{ i.user.username | default:"Post Title" }}
-                                                        </h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <!-- Example content. Replace with your actual data fields as needed. -->
-                                                    <strong>{{ i.user.username|default:"Title" }}
-                                                    </strong>
-                                                    <span>
-                                                        &nbsp; {{ i.caption | default:"Lorem ipsum dolorsitamet..." }}
-                                                    </span>
-                                                    <!-- Comments Section -->
-                                                    <div class="comments-section comment-sec">
-                                                        {% for comment in i.comments.all %}
-                                                        <div class="comment">
-                                                            <strong>{{ comment.user.username }}</strong>
-                                                            &nbsp;:
-                                                            <span>{{ comment.content }}</span>
-                                                            <div class="text-muted" style="font-size: 0.8em">
-                                                                {{ comment.timestamp|date:"M d" }}
-                                                            </div>
-                                                        </div>
-                                                        {% empty %}
-                                                        <p>No comments yet.</p>
-                                                        {% endfor %}
-                                                    </div>
-
-                                                    <!-- You could also include additional data, comments, likes, etc. -->
-                                                </div>
+                                            <!-- Left Column -->
+                                            <div class="left-col p-0">
+                                                <img src="{{ i.image.url|default:'...' }}" alt="Post {{ i.id }}"
+                                                    class="img-fluid" loading="lazy" />
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
+                                            <!-- Right Column -->
+                                            <div class="right-col bg-white">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="postModalLabel{{ i.id }}">
+                                                        {{ i.user.username|default:"Post Title" }}
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <strong>{{ i.user.username|default:"Title" }}</strong>
+                                                <span>&nbsp; {{ i.caption|default:"Lorem ipsum dolorsitamet..."}}</span>
+                                                <div class="comments-section comment-sec">
+                                                    {% for comment in i.comments.all %}
+                                                    <div class="comment">
+                                                        {% if i.user.image and i.user.image.url %}
+                                                        <img src="{{i.user.image.url}}" alt="Profile Picture"
+                                                            class="rounded-circle mb-3" width="40" height="40" />
+                                                        {% else %}
+                                                        <img src="{% static 'placeholder/placeholder.jpg' %}" alt="..."
+                                                            class="rounded-circle mb-3" width="120" height="120" />
+                                                        {% endif %}
+                                                        <strong>{{ comment.user.username }}</strong>&nbsp;:
+                                                        <span>{{ comment.content }}</span>
+                                                        <div class="text-muted" style="font-size: 0.8em">
+                                                            {{ comment.timestamp|date:"M d" }}
+                                                        </div>
+                                                    </div>
+                                                    {% empty %}
+                                                    <p>No comments yet.</p>
+                                                    {% endfor %}
+                                                </div>
+                                                <form method="POST" class="d-flex"
+                                                    action="{% url 'comment' %}?username={{ user.username }}&post_id={{ i.id }}">
+                                                    {% csrf_token %}
+                                                    <input class="form-control" id="comment" name="comment" rows="1"
+                                                        placeholder="Add a comment..." />
+                                                    <button type="submit" class="btn btn-primary">Post</button>
+                                                </form>
+                                            </div>
+                                        </div><!-- .modal-body -->
+                                    </div><!-- .modal-content -->
+                                </div><!-- .modal-dialog -->
+                            </div><!-- .modal -->
+
                             <!-- End of modal -->
                             {% endfor %}
                             <!-- Add more as needed -->
