@@ -27,7 +27,7 @@
                             <strong>{{true_conversations_count}}</strong> following
                         </p>
                         <!-- Additional info or buttons -->
-                        {% if user.is_authenticated %}
+                        {% if request.user == user %}
                         <a href="#" class="btn btn-outline-dark btn-sm">Edit profile</a>
                         {% endif %}
                     </div>
