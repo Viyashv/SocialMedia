@@ -1,6 +1,6 @@
 from smtplib import SMTPException
 from django.contrib import messages
-from django.shortcuts import render,redirect
+from django.shortcuts import get_object_or_404, render,redirect
 from django.contrib.auth import authenticate , logout,login     
 from .models import *
 from django.db.models import Q
@@ -171,3 +171,23 @@ def comment(request):
         create = Comment.objects.create(user_id = commentByUser.id , content = comment ,post = postInstances)
         create.save()
         return redirect(f"/profile/?User={userInstance.id}")
+    
+
+def likeByUser(request):
+    if request.method == 'POST':
+        user  = request.GET.get("User")
+        post = request.GET.get('Post')
+        # print(f'User id :- {user} , post id :- {post}')
+
+        post_instance = get_object_or_404(Post, id=post)
+        user_instance = get_object_or_404(CustomUser, id=user)
+
+        if user_instance in post_instance.likes.all():
+            # User has already liked — so unlike
+            post_instance.likes.remove(user_instance)
+            # print("Post unliked.")
+        else:
+            # User has not liked — so like
+            post_instance.likes.add(user_instance)
+            # print("Post liked.")
+        return redirect(f"/profile/?User={post_instance.user.id}")

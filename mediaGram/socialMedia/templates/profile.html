@@ -141,14 +141,22 @@
                                                     {% endfor %}
                                                 </div>
                                                 <!-- Section for comments,likes counts -->
-                                                <div class="d-flex align-items-center ps-2 border border-top-3 border-dark">
-                                                    <ul class="list-unstyled ps-0 mb-1">
+                                                <div class="ps-2 border border-top-3 border-dark">
+                                                    <ul class="list-unstyled ps-0 mb-1 d-flex align-items-center ">
                                                         {% if request.user.is_authenticated and request.user in i.likes.all %}
-                                                        <i class="bi bi-heart-fill fs-4 ms-3">
-                                                            {{ i.likes.count }} Likes</i>
+                                                        <form method="post" class="m-0" action="{% url 'likePost' %}?User={{request.user.id}}&Post={{i.id}}">
+                                                            {% csrf_token %}
+                                                            <button class="bi bi-heart-fill fs-4 btn btn-none m-0 ps-1">
+                                                                {{ i.likes.count }} Likes
+                                                            </button>
+                                                        </form>
                                                         {% else %}
-                                                        <i class="bi bi-heart fs-4 ms-3">
-                                                            {{ i.likes.count }} Likes</i>
+                                                        <form method="post" class="m-0" action="{% url 'likePost' %}?User={{request.user.id}}&Post={{i.id}}">
+                                                            {% csrf_token %}
+                                                            <button class="bi bi-heart fs-4 btn btn-none m-0 ps-1">
+                                                                {{ i.likes.count }} Likes
+                                                            </button>
+                                                        </form>
                                                         {% endif %}
                                                         <i class="bi bi-chat fs-4 ms-3">
                                                             {{ i.comments.all.count }}

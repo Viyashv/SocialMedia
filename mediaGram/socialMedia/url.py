@@ -25,4 +25,5 @@ urlpatterns = [
     path('profile/',myProfiile , name="profile"),
     path('verify_email/',verify_email, name="verify_email"),
     path('comment/',comment, name="comment"),
+    path('likePost/',likeByUser, name="likePost"),
 ]
