@@ -145,14 +145,19 @@ def logoutUser(request):
 
 
 @login_required(login_url="login")
-def usereProfiile(request):
-    user = request.user
-    # print(user)
+def myProfiile(request):
+    user_id = request.GET.get('User')
+    print(f"User id :- {user_id}")
+    user = CustomUser.objects.get(id = user_id)
+    print(f"user instances :- {user}" )
     context ={}
     context["false_conversations_count"] = user.conversations.filter(status=False).count()
     context["true_conversations_count"] = user.conversations.filter(status=True).count()
     context["data"] = Post.objects.filter(user = user)
-    return render(request , "profile.html" ,context)
+    context['user'] = user
+    return render(request , "profile.html" , context)
+
+
 
 def comment(request):
     if request.method == 'POST':

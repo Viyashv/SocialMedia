@@ -38,7 +38,7 @@ class CustomUser(AbstractUser):
     image = models.ImageField(upload_to="upload/User" , blank=True , null=True)
 
     def __str__(self):
-        return self.username
+        return f"User Id :- {self.id} - Username :- {self.username}"
 
 class Conversation(models.Model):
     """
