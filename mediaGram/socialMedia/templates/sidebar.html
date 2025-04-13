@@ -27,9 +27,9 @@
             <li class="w-max-content">
                 <a href="{% url 'profile' %}?User={{request.user.id}}" class="nav-link d-flex align-items-center gap-3">
                     {% if request.user.image and request.user.image.url %}
-                    <img src="{{request.user.image.url}}" alt="Profile Picture" class="rounded-circle mb-1" width="30" height="30" />
+                    <img src="{{request.user.image.url}}" alt="Profile Picture" loading="lazy" class="rounded-circle mb-1" width="30" height="30" />
                     {% else %}
-                    <img src="{% static 'placeholder/placeholder.jpg' %}" alt="..." class="rounded-circle mb-1" width="30" height="30" />
+                    <img src="{% static 'placeholder/placeholder.jpg' %}" alt="..." loading="lazy" class="rounded-circle mb-1" width="30" height="30" />
                     {% endif %} <span>Profile</span>
                 </a>
             </li>

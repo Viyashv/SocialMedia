@@ -122,10 +122,10 @@ def loginUser(request):
     if request.method == 'POST':
         username = request.POST.get('userName')
         password = request.POST.get('password')
-        print(f"username = {username} , password = {password}")
+        # print(f"username = {username} , password = {password}")
         user = authenticate(request, username=username, password=password)
         userName = CustomUser.objects.filter(username__exact = username)
-        print(userName)
+        # print(userName)
         if len(userName) > 0:
             if user is not None:
                 login(request , user)
@@ -147,22 +147,27 @@ def logoutUser(request):
 @login_required(login_url="login")
 def myProfiile(request):
     user_id = request.GET.get('User')
-    print(f"User id :- {user_id}")
+    # print(f"User id :- {user_id}")
     user = CustomUser.objects.get(id = user_id)
-    print(f"user instances :- {user}" )
+    # print(f"user instances :- {user}" )
     context ={}
     context["false_conversations_count"] = user.conversations.filter(status=False).count()
     context["true_conversations_count"] = user.conversations.filter(status=True).count()
     context["data"] = Post.objects.filter(user = user)
     context['user'] = user
-    return render(request , "profile.html" , context)
+    return render(request , "profile.html",context)
 
-
-
+@login_required(login_url='login')
 def comment(request):
     if request.method == 'POST':
         post_id = request.GET.get('post_id')
         comment = request.POST.get('comment')
         user_userName = request.GET.get('username')
-        print(f"Post ID = {post_id} , comment = {comment} , username = {user_userName}")
-        return redirect('profile')
+        postInstances = Post.objects.get(id = post_id)
+        userInstance = CustomUser.objects.get(id = postInstances.user.id)
+        commentByUser = CustomUser.objects.get(username = user_userName)
+        # print(f"post instance :- {postInstances} , user instance :- {userInstance.id}")
+        # print(f"Post ID = {post_id} , comment = {comment} , username = {user_userName}")
+        create = Comment.objects.create(user_id = commentByUser.id , content = comment ,post = postInstances)
+        create.save()
+        return redirect(f"/profile/?User={userInstance.id}")

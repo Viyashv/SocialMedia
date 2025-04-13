@@ -107,12 +107,12 @@
                                                 <div class="mb-2 ps-2">
                                                     {% if i.user.image and i.user.image.url %}
                                                     <img src="{{i.user.image.url}}" alt="Profile Picture"
-                                                        class="rounded-circle mb-3" width="40" height="40" />
+                                                        class="rounded-circle mb-1" width="25" height="25" />
                                                     {% else %}
                                                     <img src="{% static 'placeholder/placeholder.jpg' %}" alt="..."
-                                                        class="rounded-circle mb-3" width="40" height="40" />
+                                                        class="rounded-circle mb-1" width="25" height="25" />
                                                     {% endif %}
-                                                    <strong>{{ i.user.username|default:"Title" }}</strong>
+                                                    <strong>{{ i.user.username|default:"Title" }}</strong> :
                                                     <span>&nbsp; {{ i.caption|default:"Lorem ipsum dolorsitamet..."}}</span>
                                                 </div>
                                                 <div class="comments-section comment-sec ps-2">
@@ -123,11 +123,10 @@
                                                             style="cursor: pointer">
                                                             {% if comment.user.image and comment.user.image.url %}
                                                             <img src="{{comment.user.image.url}}" alt="Profile Picture"
-                                                                class="rounded-circle mb-3" width="40" height="40" />
+                                                                class="rounded-circle mb-1" width="25" height="25" />
                                                             {% else %}
                                                             <img src="{% static 'placeholder/placeholder.jpg' %}"
-                                                                alt="..." class="rounded-circle mb-3" width="40"
-                                                                height="40" />
+                                                                alt="..." class="rounded-circle mb-1" width="25" height="25" />
                                                             {% endif %}
                                                             <strong> {{ comment.user.username }} </strong>
                                                         </a>
@@ -141,8 +140,9 @@
                                                     <p>No comments yet.</p>
                                                     {% endfor %}
                                                 </div>
-                                                <div class="d-flex align-items-center ps-2">
-                                                    <ul class="list-unstyled ps-0">
+                                                <!-- Section for comments,likes counts -->
+                                                <div class="d-flex align-items-center ps-2 border border-top-3 border-dark">
+                                                    <ul class="list-unstyled ps-0 mb-1">
                                                         {% if request.user.is_authenticated and request.user in i.likes.all %}
                                                         <i class="bi bi-heart-fill fs-4 ms-3">
                                                             {{ i.likes.count }} Likes</i>
@@ -155,10 +155,11 @@
                                                         </i>
                                                     </ul>
                                                 </div>
-                                                <form method="POST" class="d-flex card-footer p-2 border border-2 border-top-dark border-bottom-0"
-                                                    action="{% url 'comment' %}?username={{ user.username }}&post_id={{ i.id }}">
+                                                <form method="POST" novalidate
+                                                    class="d-flex card-footer p-2 border border-2 border-top-dark border-bottom-0 comment-form needs-validation"
+                                                    action="{% url 'comment' %}?username={{ request.user.username }}&post_id={{ i.id }}">
                                                     {% csrf_token %}
-                                                    <input class="form-control border border-0" id="comment" name="comment" rows="1" required
+                                                    <input class="form-control border border-0 none" id="comment" name="comment" rows="1" required
                                                         placeholder="Add a comment..." />
                                                     <button type="submit" class="btn btn-none">
                                                         Post
