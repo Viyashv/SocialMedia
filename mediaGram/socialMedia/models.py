@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.forms import ValidationError
 # Create your models here.
 class Post(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts')
@@ -72,3 +73,16 @@ class Message(models.Model):
     def __str__(self):
         return f"Message from {self.sender.username} at {self.timestamp}"
     
+class Followers(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='followers',
+                             null=True, blank=True)
+    follower = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='following',
+                                 null=True, blank=True)
+    def clean(self):
+        if self.user == self.follower:
+            raise ValidationError("A user cannot follow themselves.")
+    class Meta:
+        unique_together = ('user', 'follower')
+
+    def __str__(self):
+        return f"{self.user.username} is following {self.follower.username}"

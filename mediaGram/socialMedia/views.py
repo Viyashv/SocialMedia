@@ -14,19 +14,22 @@ from django.core.mail import send_mail # send mail to user for email verificatio
 def Home(request):
     """Get all the user"""
     try:
+        context ={}
         response = requests.get('https://dummyjson.com/posts?limit=20')
         response.raise_for_status()  # Raises an HTTPError if the response status is 4xx, 5xx
 
         # Parse the JSON data
         data = response.json()
-        posts = data['posts']
+        context['posts'] = data['posts']
+        context['allPosts'] = Post.objects.all()
         # Print the data (or process it as needed)
-        return render(request, 'home.html', {"posts":posts})
+        return render(request, 'home.html', context)
     except requests.exceptions.HTTPError as http_err:
         print(f"HTTP error occurred: {http_err}")
     except Exception as err:
         print(f"An error occurred: {err}")
-    return render(request, 'home.html', )
+    
+    return render(request, 'home.html')
 
 
 def registerUser(request):
@@ -151,8 +154,8 @@ def myProfiile(request):
     user = CustomUser.objects.get(id = user_id)
     # print(f"user instances :- {user}" )
     context ={}
-    context["false_conversations_count"] = user.conversations.filter(status=False).count()
-    context["true_conversations_count"] = user.conversations.filter(status=True).count()
+    context["followers_count"] = user.followers.all().count()
+    context["following_count"] = user.following.all().count()
     context["data"] = Post.objects.filter(user = user)
     context['user'] = user
     return render(request , "profile.html",context)

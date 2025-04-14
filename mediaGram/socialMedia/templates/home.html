@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
 <div class="container-fluid">
     <div class="row min-vh-100">
         <!-- Sidebar -->
@@ -12,10 +12,73 @@
                     <i class="bi bi-person"></i>
                 </div>
             </div>
-
+            
             <!-- Post -->
+             {% for i in allPosts %}
+                <div class="card mb-4 shadow">
+
+                    <!-- Card Header -->
+                    <div class="card-header d-flex align-items-center bg-white border-bottom">
+                        <!-- User DP (avatar) -->
+                         {% if i.user.image and i.user.image.url %}
+                            <img src="{{i.user.image.url}}" alt="User Avatar" class="rounded-circle avatar me-2" height="40" width="40" />
+                        {% else %}
+                            <img src="{% static 'placeholder/placeholder.jpg' %}" alt="User Avatar" class="rounded-circle avatar me-2" height="40" width="40" />
+                        {% endif %}
+                        <!-- User Name -->
+                        <strong>{{ i.user.username }}</strong>
+                    </div>
+
+                    <!-- Main Image -->
+                    <img src="https://via.placeholder.com/600x400" class="card-img-top img-fluid" alt="Post Image" />
+
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <!-- Like & Comment Buttons -->
+                        <div class="d-flex justify-content-start mb-2">
+                            <!-- Like button -->
+                            <button type="button" class="btn btn-light d-flex align-items-center me-3">
+                                <i class="bi bi-heart me-1"></i>
+                                Like
+                            </button>
+
+                            <!-- Comment button -->
+                            <button type="button" class="btn btn-light d-flex align-items-center">
+                                <i class="bi bi-chat me-1"></i>
+                                Comment
+                            </button>
+                        </div>
+
+                        <!-- Total Likes -->
+                        <p class="fw-bold mb-1">123 likes</p>
+
+                        <!-- Caption -->
+                        <p class="mb-2">
+                            Here’s a short caption describing the picture or sharing some thoughts.
+                        </p>
+
+                        <!-- View All Comments & Count -->
+                        <p class="text-muted small mb-0">
+                            <a href="#" class="text-decoration-none">
+                                View all 10 comments
+                            </a>
+                        </p>
+                    </div>
+
+                    <!-- Card Footer: Add a Comment -->
+                    <div class="card-footer bg-white">
+                        <form class="d-flex">
+                            <input type="text" class="form-control me-2" placeholder="Add a comment..." />
+                            <button type="submit" class="btn btn-primary">
+                                Post
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            {% endfor %}
             {% for i in posts %}
-            <div class="card my-5 shadow">
+            <div class="card my-2 shadow">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <strong>{{ request.user }}</strong>
                     <span class="text-muted small">2h</span>
