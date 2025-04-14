@@ -1,5 +1,6 @@
 from smtplib import SMTPException
 from django.contrib import messages
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render,redirect
 from django.contrib.auth import authenticate , logout,login     
 from .models import *
@@ -8,6 +9,7 @@ import requests
 from django.contrib.auth.decorators import login_required
 import random #To create random 5-digit code for email verification
 from django.core.mail import send_mail # send mail to user for email verification
+from django.views.decorators.http import require_POST
 # Create your views here.
 
 @login_required(login_url="login")
@@ -194,3 +196,42 @@ def likeByUser(request):
             post_instance.likes.add(user_instance)
             # print("Post liked.")
         return redirect(f"/profile/?User={post_instance.user.id}")
+    
+@require_POST
+@login_required
+def likePost(request):
+    post_id = request.POST.get("Post")
+    user  = request.GET.get("User")
+    post_instance = get_object_or_404(Post, id=post_id)
+    user_instance = get_object_or_404(CustomUser, id=user)
+    
+    # Toggle the like status
+    if request.user in post_instance.likes.all():
+        post_instance.likes.remove(user_instance)
+        liked = False
+    else:
+        post_instance.likes.add(user_instance)
+        liked = True
+
+    like_count = post_instance.likes.count()
+    # Return JSON with updated like info
+    return JsonResponse({'liked': liked, 'like_count': like_count})
+    
+def likePost(request):
+        if request.method == 'POST':
+            user  = request.POST.get("User")
+            post = request.POST.get('Post')
+            print(f'User id :- {user} , post id :- {post}')
+
+            post_instance = get_object_or_404(Post, id=post)
+            user_instance = get_object_or_404(CustomUser, id=user)
+
+            if user_instance in post_instance.likes.all():
+                # User has already liked — so unlike
+                post_instance.likes.remove(user_instance)
+                # print("Post unliked.")
+            else:
+                # User has not liked — so like
+                post_instance.likes.add(user_instance)
+                # print("Post liked.")
+            return redirect("home")

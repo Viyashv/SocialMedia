@@ -1,31 +1,31 @@
 {% load static %}
 <div class="d-flex p-0 justify-content-between">
     <!-- Sidebar -->
-    <div class="sidebar border-end d-flex flex-column px-2">
+    <div class="sidebar border-end d-flex flex-column px-2 vw-15 shadow-lg">
         <ul class="nav flex-column gap-1 justify-content-center mt-4">
-            <li class="w-max-content"><a href="/" class="nav-link d-flex align-items-center gap-3">
+            <li class="w-max-content"><a href="/" class="nav-link d-flex align-items-center gap-2 ps-2">
                     <i class="bi bi-house fs-4"></i> <span>Home</span>
                 </a></li>
-            <li class="w-max-content"><a href="#" class="nav-link d-flex align-items-center gap-3">
+            <li class="w-max-content"><a href="#" class="nav-link d-flex align-items-center gap-2 ps-2">
                     <i class="bi bi-search fs-4"></i> <span>Search</span>
                 </a></li>
-            <li class="w-max-content"><a href="#" class="nav-link d-flex align-items-center gap-3">
+            <li class="w-max-content"><a href="#" class="nav-link d-flex align-items-center gap-2 ps-2">
                     <i class="bi bi-globe fs-4"></i> <span>Explore</span>
                 </a></li>
-            <li class="w-max-content"><a href="#" class="nav-link d-flex align-items-center gap-3">
+            <li class="w-max-content"><a href="#" class="nav-link d-flex align-items-center gap-2 ps-2">
                     🎬 <span>Reels</span>
                 </a></li>
-            <li class="w-max-content" class="p-0"><a href="#" class="nav-link d-flex align-items-center gap-3">
+            <li class="w-max-content" class="p-0"><a href="#" class="nav-link d-flex align-items-center gap-2 ps-2">
                     <i class="bi bi-chat-right fs-4"></i> <span>Messages</span> <span class="badge bg-danger ms-1">7</span>
                 </a></li>
-            <li class="w-max-content"><a href="#" class="nav-link d-flex align-items-center gap-3">
+            <li class="w-max-content"><a href="#" class="nav-link d-flex align-items-center gap-2 ps-2">
                     <i class="bi bi-heart-fill fs-4"></i> <span>Notifications</span>
                 </a></li>
-            <li class="w-max-content"><a href="#" class="nav-link d-flex align-items-center gap-3">
+            <li class="w-max-content"><a href="#" class="nav-link d-flex align-items-center gap-2 ps-2">
                     ➕ <span>Create</span>
                 </a></li>
             <li class="w-max-content">
-                <a href="{% url 'profile' %}?User={{request.user.id}}" class="nav-link d-flex align-items-center gap-3">
+                <a href="{% url 'profile' %}?User={{request.user.id}}" class="nav-link d-flex align-items-center gap-2 ps-2">
                     {% if request.user.image and request.user.image.url %}
                     <img src="{{request.user.image.url}}" alt="Profile Picture" loading="lazy" class="rounded-circle mb-1" width="30" height="30" />
                     {% else %}
@@ -33,12 +33,12 @@
                     {% endif %} <span>Profile</span>
                 </a>
             </li>
-            <li class="w-max-content"><a href="#" class="nav-link d-flex align-items-center gap-3">
+            <li class="w-max-content"><a href="#" class="nav-link d-flex align-items-center gap-2 ps-2">
                     <i class="bi bi-chat fs-4"></i> <span>Threads</span> 
                 </a></li>
             </ul>
             <div class="nav-link dropdown dropup mt-auto">
-                <a class="nav-link dropdown-toggle d-flex align-items-center gap-3 px-3" href="#" role="button" data-bs-toggle="dropdown"
+                <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 px-3 ps-2" href="#" role="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
                     <i class="bi bi-list fs-4"></i> <span>More</span>
                 </a>

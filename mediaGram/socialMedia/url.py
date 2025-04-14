@@ -27,6 +27,7 @@ urlpatterns = [
     path('verify_email/',verify_email, name="verify_email"),
     path('comment/',comment, name="comment"),
     path('likePost/',likeByUser, name="likePost"),
+    path('like/',likePost, name="like"),
     # below is the urls for forget password
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
