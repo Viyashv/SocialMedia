@@ -171,3 +171,6 @@ body {
 .none{
     box-shadow: none !important;
 }
+.bg-img-none{
+    background-image: none !important;
+}

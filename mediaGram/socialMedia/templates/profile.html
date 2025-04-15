@@ -116,6 +116,7 @@
                                                     <span>&nbsp; {{ i.caption|default:"Lorem ipsum dolorsitamet..."}}</span>
                                                 </div>
                                                 <div class="comments-section comment-sec ps-2">
+                                                    <!-- comments section -->
                                                     {% for comment in i.comments.all %}
                                                     <div class="comment mb-3">
                                                         <a href="{% url 'profile' %}?User={{comment.user.id}}"
@@ -140,7 +141,7 @@
                                                     <p>No comments yet.</p>
                                                     {% endfor %}
                                                 </div>
-                                                <!-- Section for comments,likes counts -->
+                                                <!-- Section for add comments,likes counts -->
                                                 <div class="ps-2 border border-top-3 border-dark">
                                                     <ul class="list-unstyled ps-0 mb-1 d-flex align-items-center ">
                                                         {% if request.user.is_authenticated and request.user in i.likes.all %}

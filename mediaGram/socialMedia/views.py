@@ -10,6 +10,8 @@ from django.contrib.auth.decorators import login_required
 import random #To create random 5-digit code for email verification
 from django.core.mail import send_mail # send mail to user for email verification
 from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
+import json
 # Create your views here.
 
 @login_required(login_url="login")
@@ -180,20 +182,19 @@ def comment(request):
 
 def likeByUser(request):
     if request.method == 'POST':
-        user  = request.GET.get("User")
+        user  = request.user
         post = request.GET.get('Post')
         # print(f'User id :- {user} , post id :- {post}')
 
         post_instance = get_object_or_404(Post, id=post)
-        user_instance = get_object_or_404(CustomUser, id=user)
 
-        if user_instance in post_instance.likes.all():
+        if user in post_instance.likes.all():
             # User has already liked — so unlike
-            post_instance.likes.remove(user_instance)
+            post_instance.likes.remove(user)
             # print("Post unliked.")
         else:
             # User has not liked — so like
-            post_instance.likes.add(user_instance)
+            post_instance.likes.add(user)
             # print("Post liked.")
         return redirect(f"/profile/?User={post_instance.user.id}")
     
@@ -201,21 +202,44 @@ def likeByUser(request):
 @login_required
 def likePost(request):
     post_id = request.POST.get("Post")
-    user  = request.POST.get("User")
+    user  = request.user
     # print(f'User id :- {user} , post id :- {post_id}')
-    post_instance = get_object_or_404(Post, id=post_id)
-    user_instance = get_object_or_404(CustomUser, id=user)
+    post_instance = get_object_or_404(Post, id=post_id) 
     
     # Toggle the like status
-    if request.user in post_instance.likes.all():
-        post_instance.likes.remove(user_instance)
+    if user in post_instance.likes.all():
+        post_instance.likes.remove(user)
         liked = False
     else:
-        post_instance.likes.add(user_instance)
+        post_instance.likes.add(user)
         liked = True
 
     like_count = post_instance.likes.count()
     # Return JSON with updated like info
     return JsonResponse({'liked': liked, 'like_count': like_count})
     
+
+@csrf_exempt  # Use with caution; ensure proper CSRF handling in production
+def add_comment(request):
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        data = json.loads(request.body)
+        post_id = data.get('Post')
+        user_id = data.get('User')
+        comment_text = data.get('comment')
+        print(f"post id :- {post_id} , user id :- {user_id} , comment :- {comment_text}")
+
+        # Perform validation and save the comment
+        post = get_object_or_404(Post, id=post_id)
+        user = get_object_or_404(CustomUser, id=user_id)
+        Comment.objects.create(post=post, user=user, content=comment_text)
+
+        # Get the updated comment count
+        comment_count = post.comments.count()
+
+        return JsonResponse({
+            'success': True,
+            'comment_text': comment_text,
+            'comment_count': comment_count
+        })
+    return JsonResponse({'success': False}, status=400)
 

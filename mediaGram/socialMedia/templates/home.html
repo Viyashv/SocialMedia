@@ -42,9 +42,16 @@
                     <!-- Like & Comment Buttons -->
                     <div class="d-flex justify-content-start mb-2">
                         <!-- Like button -->
-                        <button type="button" id="likeButton_{{ i.id }}" class="btn btn-none d-flex align-items-center ps-0">
-                            <i class="bi bi-heart me-1 fs-4" id="likeIcon_{{ i.id }}"></i>
-                        </button>
+                         {% if request.user.is_authenticated and request.user in i.likes.all %}
+                            <button type="button" id="likeButton_{{ i.id }}" class="btn btn-none d-flex align-items-center ps-0">
+                                <i class="bi bi-heart-fill me-1 fs-4" id="likeIcon_{{ i.id }}"></i>
+                            </button>
+                        {% else %}
+                            <button type="button" id="likeButton_{{ i.id }}" class="btn btn-none d-flex align-items-center ps-0">
+                                <i class="bi bi-heart me-1 fs-4" id="likeIcon_{{ i.id }}"></i>
+                            </button>
+                        {% endif %}
+
 
                         <!-- Comment button -->
                         <button type="button" class="btn btn-none d-flex align-items-center ps-0">
@@ -63,18 +70,19 @@
                     <!-- View All Comments & Count -->
                     <p class="text-muted small mb-0">
                         <a href="#" class="text-decoration-none">
-                            View all {{ i.comments.all.count }} comments
+                            View all <span id="comment-count-{{ i.id }}">{{ i.comments.all.count }}</span> comments
                         </a>
                     </p>
                 </div>
 
                 <!-- Card Footer: Add a Comment -->
                 <div class="card-footer bg-white">
-                    <form class="d-flex needs-validation" novalidate action="{% url 'comment' %}" method="POST">
+                    <form class="d-flex needs-validation comment-form border-0" 
+                        id="comment-form-{{ i.id }}" novalidate method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="Post" value="{{ i.id }}" />
                         <input type="hidden" name="User" value="{{ request.user.id }}" />
-                        <input type="text" class="form-control me-2 none border-0" placeholder="Add a comment..."
+                        <input type="text" class="form-control me-2 none border-0 bg-img-none" placeholder="Add a comment..."
                             name="comment" required />
                         <button type="submit" class="btn btn-primary">
                             Post
@@ -143,44 +151,5 @@
     </div>
 </div>
 
-<script>
-    document.querySelectorAll("button[id^='likeButton_']").forEach(button => {
-        button.addEventListener("click", function (e) {
-            e.preventDefault();
-            const postId = this.id.split("_")[1]; // Extract the unique post ID
-    
-            // Create form data with the relevant post id and user id
-            const formData = new FormData();
-            formData.append("Post", postId);
-            formData.append("User", "{{ request.user.id }}");
-    
-            // Append CSRF token (make sure the token is rendered correctly)
-            formData.append("csrfmiddlewaretoken", "{{ csrf_token }}");
-    
-            // Perform Ajax request using Fetch API
-            fetch("http://127.0.0.1:8000/like/", {
-                method: "POST",
-                body: formData,
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    // Update the like count
-                    document.getElementById(`likeCount_${postId}`).textContent = data.like_count + " likes";
-                    // Update the icon based on whether the post is liked
-                    const likeIcon = document.getElementById(`likeIcon_${postId}`);
-                    if (data.liked) {
-                        likeIcon.classList.remove("bi-heart");
-                        likeIcon.classList.add("bi-heart-fill");
-                    } else {
-                        likeIcon.classList.remove("bi-heart-fill");
-                        likeIcon.classList.add("bi-heart");
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error:", error);
-                });
-        });
-    });
-    
-</script>
+<script src="{% static 'ajax.js' %}"></script>
 {% endblock %}
