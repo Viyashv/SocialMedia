@@ -15,7 +15,8 @@
                         <img src="{{ user.image.url }}" alt="Profile Picture" class="rounded-circle mb-3" width="120"
                             height="120" />
                         {% else %}
-                        <img src="{% static 'placeholder/placeholder.jpg' %}" alt="..." class="rounded-circle mb-3" width="120" height="120" />
+                        <img src="{% static 'placeholder/placeholder.jpg' %}" alt="..." class="rounded-circle mb-3"
+                            width="120" height="120" />
                         {% endif %}
                         <!-- Username -->
                         <h2 class="fw-bold">{{user.username}}</h2>
@@ -35,7 +36,7 @@
             </div>
 
             <!-- Posts / Saved / Tagged Tabs -->
-            <div class="container-fluid ">
+            <div class="container-fluid">
                 <ul class="nav nav-pills justify-content-center mb-3" id="pills-tab">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="pills-posts-tab" data-bs-toggle="pill"
@@ -84,9 +85,9 @@
                                     <div class="modal-content bg-transparent border-0">
                                         <div class="modal-body p-0">
                                             <!-- Left Column -->
-                                            <div class="left-col p-0">
+                                            <div class="left-col p-0 ">
                                                 <img src="{{ i.image.url|default:'...' }}" alt="Post {{ i.id }}"
-                                                    class="img-fluid" loading="lazy" />
+                                                    class="img-fluid bg-dark border-0" loading="lazy" />
                                             </div>
 
                                             <!-- Right Column -->
@@ -104,6 +105,7 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
+                                                <!--     Header of the Post DP,username,caption    -->
                                                 <div class="mb-2 ps-2">
                                                     {% if i.user.image and i.user.image.url %}
                                                     <img src="{{i.user.image.url}}" alt="Profile Picture"
@@ -112,10 +114,12 @@
                                                     <img src="{% static 'placeholder/placeholder.jpg' %}" alt="..."
                                                         class="rounded-circle mb-1" width="25" height="25" />
                                                     {% endif %}
-                                                    <strong>{{ i.user.username|default:"Title" }}</strong> :
+                                                    <strong>{{ i.user.username | default:"Title" }}</strong>
+                                                    :
                                                     <span>&nbsp; {{ i.caption|default:"Lorem ipsum dolorsitamet..."}}</span>
                                                 </div>
-                                                <div class="comments-section comment-sec ps-2">
+                                                <!-- Comment section for the Post  -->
+                                                <div class="comments-section comment-sec ps-2" id="comment-section-{{ i.id }}">
                                                     <!-- comments section -->
                                                     {% for comment in i.comments.all %}
                                                     <div class="comment mb-3">
@@ -127,7 +131,8 @@
                                                                 class="rounded-circle mb-1" width="25" height="25" />
                                                             {% else %}
                                                             <img src="{% static 'placeholder/placeholder.jpg' %}"
-                                                                alt="..." class="rounded-circle mb-1" width="25" height="25" />
+                                                                alt="..." class="rounded-circle mb-1" width="25"
+                                                                height="25" />
                                                             {% endif %}
                                                             <strong> {{ comment.user.username }} </strong>
                                                         </a>
@@ -143,33 +148,33 @@
                                                 </div>
                                                 <!-- Section for add comments,likes counts -->
                                                 <div class="ps-2 border border-top-3 border-dark">
-                                                    <ul class="list-unstyled ps-0 mb-1 d-flex align-items-center ">
+                                                    <ul class="list-unstyled ps-0 mb-1 d-flex align-items-center">
                                                         {% if request.user.is_authenticated and request.user in i.likes.all %}
-                                                        <form method="post" class="m-0" action="{% url 'likePost' %}?User={{request.user.id}}&Post={{i.id}}">
-                                                            {% csrf_token %}
-                                                            <button class="bi bi-heart-fill fs-4 btn btn-none m-0 ps-1">
-                                                                {{ i.likes.count }} Likes
-                                                            </button>
-                                                        </form>
+                                                        <button type="button" id="likeButton_{{ i.id }}"
+                                                            class="btn btn-none d-flex align-items-center ps-0">
+                                                            <i class="bi bi-heart-fill me-1 fs-4" id="likeIcon_{{ i.id }}"></i>
+                                                            <span id="likeCount_{{ i.id }}">{{ i.likes.count }} Likes</span>
+                                                        </button>
                                                         {% else %}
-                                                        <form method="post" class="m-0" action="{% url 'likePost' %}?User={{request.user.id}}&Post={{i.id}}">
-                                                            {% csrf_token %}
-                                                            <button class="bi bi-heart fs-4 btn btn-none m-0 ps-1">
-                                                                {{ i.likes.count }} Likes
-                                                            </button>
-                                                        </form>
+                                                        <button type="button" id="likeButton_{{ i.id }}"
+                                                            class="btn btn-none d-flex align-items-center ps-0">
+                                                            <i class="bi bi-heart me-1 fs-4" id="likeIcon_{{ i.id }}"></i>
+                                                            <span id="likeCount_{{ i.id }}">{{ i.likes.count }} Likes</span>
+                                                        </button>
                                                         {% endif %}
-                                                        <i class="bi bi-chat fs-4 ms-3">
+                                                        <i class="bi bi-chat fs-4 ms-3" id="comment-count-{{ i.id }}">
                                                             {{ i.comments.all.count }}
                                                         </i>
                                                     </ul>
                                                 </div>
                                                 <form method="POST" novalidate
-                                                    class="d-flex card-footer p-2 border border-2 border-top-dark border-bottom-0 comment-form needs-validation"
-                                                    action="{% url 'comment' %}?username={{ request.user.username }}&post_id={{ i.id }}">
+                                                    class="d-flex card-footer p-2 border border-2 border-top-dark border-bottom-0 comment-form needs-validation">
                                                     {% csrf_token %}
-                                                    <input class="form-control border border-0 none" id="comment" name="comment" rows="1" required
+                                                    <input class="form-control border border-0 none bg-img-none" id="comment"
+                                                        name="comment" rows="1" required
                                                         placeholder="Add a comment..." />
+                                                    <input type="hidden" name="Post" value="{{ i.id }}" />
+                                                    <input type="hidden" name="User" value="{{ request.user.id }}" />
                                                     <button type="submit" class="btn btn-none">
                                                         Post
                                                     </button>

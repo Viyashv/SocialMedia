@@ -63,10 +63,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const postId = form.querySelector('input[name="Post"]').value;
       const userId = form.querySelector('input[name="User"]').value;
-      const commentText = form.querySelector('input[name="comment"]').value;
-      const csrfToken = form.querySelector(
-        'input[name="csrfmiddlewaretoken"]'
-      ).value;
+      const commentText = form.querySelector('input[name="comment"]').value.trim(); // Trim the comment text to remove leading/trailing whitespace
+      const csrfToken = form.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+      if (commentText === "") {
+        return; // Do not proceed if the comment is blank
+      }
 
       fetch("http://127.0.0.1:8000/addcomment/", {
         method: "POST",
@@ -85,18 +87,30 @@ document.addEventListener("DOMContentLoaded", function () {
         .then((data) => {
           if (data.success) {
             // Update the comment count
-            const commentCountSpan = document.getElementById(
-              `comment-count-${postId}`
-            );
+            const commentCountSpan = document.getElementById(`comment-count-${postId}`);
             commentCountSpan.textContent = data.comment_count;
 
             //  Append new comment to the comment section
-            // const commentSection = document.getElementById(
-            //   `comment-section-${postId}`
-            // );
-            // const newComment = document.createElement("p");
-            // newComment.textContent = data.comment_text;
-            // commentSection.appendChild(newComment);
+            if(document.getElementById(`comment-section-${postId}`)){
+              const commentSection = document.getElementById(`comment-section-${postId}`);
+              const newCommentDiv = document.createElement("div");
+              newCommentDiv.classList.add("comment", "mb-3");
+  
+              const profileUrl = `/profile?User=${data.user_id}`;
+              const imageUrl = data.user_image_url? data.user_image_url: "/static/placeholder/placeholder.jpg";
+  
+              newCommentDiv.innerHTML = `<a href="${profileUrl}" class="text-dark text-decoration-none" style="cursor: pointer">
+                                            <img src="${imageUrl}" alt="Profile Picture" class="rounded-circle mb-1" width="25" height="25" />
+                                            <strong> ${data.username} </strong>
+                                          </a>
+                                          &nbsp;:
+                                          <span>${data.comment_text}</span>
+                                          <div class="text-muted" style="font-size: 0.8em">${data.timestamp}</div>
+                                        `;
+  
+              commentSection.appendChild(newCommentDiv);
+            }
+
             form.reset();
           } else {
             alert("Error adding comment.");

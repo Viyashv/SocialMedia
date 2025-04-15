@@ -69,3 +69,19 @@
         {% endif %}
     </button>
 </form>
+
+{% if request.user.is_authenticated and request.user in i.likes.all %}
+<form method="post" class="m-0" action="{% url 'likePost' %}?User={{request.user.id}}&Post={{i.id}}">
+    {% csrf_token %}
+    <button class="bi bi-heart-fill fs-4 btn btn-none m-0 ps-1">
+        {{ i.likes.count }} Likes
+    </button>
+</form>
+{% else %}
+<form method="post" class="m-0" action="{% url 'likePost' %}?User={{request.user.id}}&Post={{i.id}}">
+    {% csrf_token %}
+    <button class="bi bi-heart fs-4 btn btn-none m-0 ps-1">
+        {{ i.likes.count }} Likes
+    </button>
+</form>
+{% endif %}

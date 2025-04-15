@@ -12,6 +12,8 @@ from django.core.mail import send_mail # send mail to user for email verificatio
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.utils.timesince import timesince
+from django.utils.timezone import localtime
 # Create your views here.
 
 @login_required(login_url="login")
@@ -23,9 +25,13 @@ def Home(request):
         response.raise_for_status()  # Raises an HTTPError if the response status is 4xx, 5xx
 
         # Parse the JSON data
+        user = request.user
+        # Get all follower records where the current user is the follower
+        following_ids = Followers.objects.filter(user=user).values_list('follower__id', flat=True)
+        allpost = Post.objects.filter(Q(user__in=following_ids) | Q(user=request.user)).order_by("-timestamp")
         data = response.json()
         context['posts'] = data['posts']
-        context['allPosts'] = Post.objects.all()
+        context['allPosts'] = allpost
         # Print the data (or process it as needed)
         return render(request, 'home.html', context)
     except requests.exceptions.HTTPError as http_err:
@@ -164,43 +170,15 @@ def myProfiile(request):
     context['user'] = user
     return render(request , "profile.html",context)
 
-@login_required(login_url='login')
-def comment(request):
-    if request.method == 'POST':
-        post_id = request.GET.get('post_id')
-        comment = request.POST.get('comment')
-        user_userName = request.GET.get('username')
-        postInstances = Post.objects.get(id = post_id)
-        userInstance = CustomUser.objects.get(id = postInstances.user.id)
-        commentByUser = CustomUser.objects.get(username = user_userName)
-        # print(f"post instance :- {postInstances} , user instance :- {userInstance.id}")
-        # print(f"Post ID = {post_id} , comment = {comment} , username = {user_userName}")
-        create = Comment.objects.create(user_id = commentByUser.id , content = comment ,post = postInstances)
-        create.save()
-        return redirect(f"/profile/?User={userInstance.id}")
-    
-
-def likeByUser(request):
-    if request.method == 'POST':
-        user  = request.user
-        post = request.GET.get('Post')
-        # print(f'User id :- {user} , post id :- {post}')
-
-        post_instance = get_object_or_404(Post, id=post)
-
-        if user in post_instance.likes.all():
-            # User has already liked — so unlike
-            post_instance.likes.remove(user)
-            # print("Post unliked.")
-        else:
-            # User has not liked — so like
-            post_instance.likes.add(user)
-            # print("Post liked.")
-        return redirect(f"/profile/?User={post_instance.user.id}")
     
 @require_POST
 @login_required
 def likePost(request):
+    """
+    This is Used by Ajax to fetch and update the like count of a post.
+    Function used to Like a post by the user and also to unlike the post if the user has already liked it.
+    return the like count of the post.
+    """
     post_id = request.POST.get("Post")
     user  = request.user
     # print(f'User id :- {user} , post id :- {post_id}')
@@ -219,27 +197,36 @@ def likePost(request):
     return JsonResponse({'liked': liked, 'like_count': like_count})
     
 
-@csrf_exempt  # Use with caution; ensure proper CSRF handling in production
+@csrf_exempt
 def add_comment(request):
+    """
+    This is used by ajax to add a comment to a post,
+    and also to update the comment count of the post.
+    """
     if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         data = json.loads(request.body)
         post_id = data.get('Post')
         user_id = data.get('User')
         comment_text = data.get('comment')
-        print(f"post id :- {post_id} , user id :- {user_id} , comment :- {comment_text}")
+        # print(f"post id :- {post_id} , user id :- {user_id} , comment :- {comment_text}")
 
         # Perform validation and save the comment
         post = get_object_or_404(Post, id=post_id)
         user = get_object_or_404(CustomUser, id=user_id)
-        Comment.objects.create(post=post, user=user, content=comment_text)
+        comment=Comment.objects.create(post=post, user=user, content=comment_text)
 
         # Get the updated comment count
         comment_count = post.comments.count()
-
-        return JsonResponse({
+        context = {
             'success': True,
             'comment_text': comment_text,
-            'comment_count': comment_count
-        })
+            'username': comment.user.username,
+            'user_id': comment.user.id,
+            'user_image_url': comment.user.image.url if comment.user.image else "",
+            'timestamp': localtime(comment.timestamp).strftime("%b %d"),
+            'comment_count': comment_count  
+        }
+
+        return JsonResponse(context)
     return JsonResponse({'success': False}, status=400)
 
