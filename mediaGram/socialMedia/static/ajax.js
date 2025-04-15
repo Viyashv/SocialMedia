@@ -4,12 +4,12 @@ document.getElementById("likeButton").addEventListener("click", function (e) {
   // Create form data
   const formData = new FormData();
   formData.append("Post", "{{ i.id }}"); // Assuming you're in a Django template loop
-  formData.append("User", "{{ i.id }}"); // Assuming you're in a Django template loop
+  formData.append("User", "{{ request.user.id }}"); // Assuming you're in a Django template loop
   // CSRF token
-  formData.append("csrfmiddlewaretoken", "{{ csrf_token }}");
+  formData.append("csrfmiddlewaretoken", "{% csrf_token %}");
 
   // Perform Ajax request using Fetch API
-  fetch("{% url 'likePost' %}", {
+  fetch("http://127.0.0.1:8000/like/", {
     method: "POST",
     body: formData,
   })

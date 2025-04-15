@@ -201,7 +201,8 @@ def likeByUser(request):
 @login_required
 def likePost(request):
     post_id = request.POST.get("Post")
-    user  = request.GET.get("User")
+    user  = request.POST.get("User")
+    # print(f'User id :- {user} , post id :- {post_id}')
     post_instance = get_object_or_404(Post, id=post_id)
     user_instance = get_object_or_404(CustomUser, id=user)
     
@@ -217,21 +218,4 @@ def likePost(request):
     # Return JSON with updated like info
     return JsonResponse({'liked': liked, 'like_count': like_count})
     
-def likePost(request):
-        if request.method == 'POST':
-            user  = request.POST.get("User")
-            post = request.POST.get('Post')
-            print(f'User id :- {user} , post id :- {post}')
 
-            post_instance = get_object_or_404(Post, id=post)
-            user_instance = get_object_or_404(CustomUser, id=user)
-
-            if user_instance in post_instance.likes.all():
-                # User has already liked — so unlike
-                post_instance.likes.remove(user_instance)
-                # print("Post unliked.")
-            else:
-                # User has not liked — so like
-                post_instance.likes.add(user_instance)
-                # print("Post liked.")
-            return redirect("home")

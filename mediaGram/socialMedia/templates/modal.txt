@@ -54,3 +54,18 @@
                                     </div>
                                 </div>
                             </div>
+
+
+
+<form action="{% url 'like' %}" method="POST" class="d-flex align-items-center me-1 ps-0">
+    {% csrf_token %}
+    <input type="hidden" name="Post" value="{{ i.id }}" />
+    <input type="hidden" name="User" value="{{ request.user.id }}" />
+    <button type="submit" class="btn btn-none">
+        {% if request.user.is_authenticated and request.user in i.likes.all %}
+            <i class="bi bi-heart-fill me-1 fs-4"></i>
+        {% else %}
+            <i class="bi bi-heart me-1 fs-4"></i>
+        {% endif %}
+    </button>
+</form>
