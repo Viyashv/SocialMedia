@@ -18,7 +18,7 @@
                     <div class="card mb-4 border-0">
 
                         <!-- Card Header -->
-                        <div class="card-header d-flex align-items-center bg-white border-bottom">
+                        <div class="card-header d-flex align-items-center border-bottom">
                             <!-- User DP (avatar) -->
                             {% if i.user.image and i.user.image.url %}
                             <img src="{{i.user.image.url}}" alt="User Avatar" class="rounded-circle avatar me-2" height="40"
@@ -44,11 +44,11 @@
                                 <!-- Like button -->
                                 {% if request.user.is_authenticated and request.user in i.likes.all %}
                                     <button type="button" id="likeButton_{{ i.id }}" class="btn btn-none d-flex align-items-center ps-0">
-                                        <i class="bi bi-heart-fill me-1 fs-4" id="likeIcon_{{ i.id }}"></i>
+                                        <i class="bi bi-heart-fill me-1 fs-4 likeIcon" data-id="{{ i.id }}"></i>
                                     </button>
                                 {% else %}
                                     <button type="button" id="likeButton_{{ i.id }}" class="btn btn-none d-flex align-items-center ps-0">
-                                        <i class="bi bi-heart me-1 fs-4" id="likeIcon_{{ i.id }}"></i>
+                                        <i class="bi bi-heart me-1 fs-4 likeIcon" data-id="{{ i.id }}"></i>
                                     </button>
                                 {% endif %}
 
@@ -60,17 +60,17 @@
                             </div>
 
                             <!-- Total Likes -->
-                            <p class="fw-bold mb-1" id="likeCount_{{ i.id }}">{{i.likes.all.count}} likes</p>
+                            <p class="fw-bold mb-1 like-count" data-id="{{ i.id }}">{{i.likes.all.count}} likes</p>
 
                             <!-- Caption -->
                             <p class="mb-2">
-                                {{i.user.username}} : {{i.caption}}
+                                <strong>{{i.user.username}}</strong> : {{i.caption}}
                             </p>
 
                             <!-- View All Comments & Count -->
                             <p class="text-muted small mb-0">
-                                <a href="#" class="text-decoration-none">
-                                    View all <span id="comment-count-{{ i.id }}">{{ i.comments.all.count }}</span> comments
+                                <a class="text-decoration-none" role="button" data-bs-toggle="modal" data-bs-target="#popUp{{ i.id }}">
+                                    View all <span class="comment-count" data-id="{{ i.id }}">{{ i.comments.all.count }}</span> comments
                                 </a>
                             </p>
                         </div>
@@ -92,9 +92,121 @@
 
                     </div>
                     <hr>
+            <!-- Modal for each post -->
+                    <!-- Modal -->
+                    <div class="modal fade" id="popUp{{ i.id }}" tabindex="-1"
+                        aria-labelledby="postModalLabel{{ i.id }}" aria-hidden="true">
+                        <!-- Use our custom class here -->
+                        <div class="modal-dialog modal-dialog-centered modal-80">
+                            <div class="modal-content bg-transparent border-0">
+                                <div class="modal-body p-0">
+                                    <!-- Left Column -->
+                                    <div class="left-col p-0 ">
+                                        <img src="{{ i.image.url|default:'...' }}" alt="Post {{ i.id }}"
+                                            class="img-fluid bg-dark border-0" loading="lazy" />
+                                    </div>
+
+                                    <!-- Right Column -->
+                                    <div class="right-col bg-white">
+                                        <div class="modal-header ps-2 py-1">
+                                            <h5 class="modal-title" id="postModalLabel{{ i.id }}">
+                                                {% if i.user.image and i.user.image.url %}
+                                                <img src="{{i.user.image.url}}" alt="Profile Picture"
+                                                    class="rounded-circle mb-1" width="40" height="40" />
+                                                {% else %}
+                                                <img src="{% static 'placeholder/placeholder.jpg' %}" alt="..."
+                                                    class="rounded-circle mb-1" width="40" height="40" />
+                                                {% endif %} {{ i.user.username|default:"Post Title"}}
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <!--     Header of the Post DP,username,caption    -->
+                                        <div class="mb-2 ps-2">
+                                            {% if i.user.image and i.user.image.url %}
+                                            <img src="{{i.user.image.url}}" alt="Profile Picture"
+                                                class="rounded-circle mb-1" width="25" height="25" />
+                                            {% else %}
+                                            <img src="{% static 'placeholder/placeholder.jpg' %}" alt="..."
+                                                class="rounded-circle mb-1" width="25" height="25" />
+                                            {% endif %}
+                                            <strong>{{ i.user.username | default:"Title" }}</strong>
+                                            :
+                                            <span>&nbsp; {{ i.caption|default:"Lorem ipsum dolorsitamet..."}}</span>
+                                        </div>
+                                        <!-- Comment section for the Post  -->
+                                        <div class="comments-section comment-sec ps-2" id="comment-section-{{ i.id }}">
+                                            <!-- comments section -->
+                                            {% for comment in i.comments.all %}
+                                            <div class="comment mb-3">
+                                                <a href="{% url 'profile' %}?User={{comment.user.id}}"
+                                                    class="text-dark text-decoration-none"
+                                                    style="cursor: pointer">
+                                                    {% if comment.user.image and comment.user.image.url %}
+                                                    <img src="{{comment.user.image.url}}" alt="Profile Picture"
+                                                        class="rounded-circle mb-1" width="25" height="25" />
+                                                    {% else %}
+                                                    <img src="{% static 'placeholder/placeholder.jpg' %}"
+                                                        alt="..." class="rounded-circle mb-1" width="25"
+                                                        height="25" />
+                                                    {% endif %}
+                                                    <strong> {{ comment.user.username }} </strong>
+                                                </a>
+                                                &nbsp;:
+                                                <span>{{ comment.content }}</span>
+                                                <div class="text-muted" style="font-size: 0.8em">
+                                                    {{ comment.timestamp|date:"M d" }}
+                                                </div>
+                                            </div>
+                                            {% empty %}
+                                            <p>No comments yet.</p>
+                                            {% endfor %}
+                                        </div>
+                                        <!-- Section for add comments,likes counts -->
+                                        <div class="ps-2 border border-top-3 border-dark">
+                                            <ul class="list-unstyled ps-0 mb-1 d-flex align-items-center">
+                                                {% if request.user.is_authenticated and request.user in i.likes.all %}
+                                                <button type="button" id="likeButton_{{ i.id }}"
+                                                    class="btn btn-none d-flex align-items-center ps-0">
+                                                    <i class="bi bi-heart-fill me-1 fs-4 likeIcon" data-id="{{ i.id }}"></i>
+                                                    <span class="like-count" data-id="{{ i.id }}">{{ i.likes.count }} Likes</span>
+                                                </button>
+                                                {% else %}
+                                                <button type="button" id="likeButton_{{ i.id }}"
+                                                    class="btn btn-none d-flex align-items-center ps-0">
+                                                    <i class="bi bi-heart me-1 fs-4 likeIcon" data-id="{{ i.id }}"></i>
+                                                    <span class="like-count" data-id="{{ i.id }}">{{ i.likes.count }} Likes</span>
+                                                </button>
+                                                {% endif %}
+                                                <i class="bi bi-chat fs-4 ms-3 comment-count" data-id="{{ i.id }}">
+                                                    {{ i.comments.all.count }}
+                                                </i>
+                                            </ul>
+                                        </div>
+                                        <form method="POST" novalidate
+                                            class="d-flex card-footer p-2 border border-2 border-top-dark border-bottom-0 comment-form needs-validation">
+                                            {% csrf_token %}
+                                            <input class="form-control border border-0 none bg-img-none" id="comment"
+                                                name="comment" rows="1" required
+                                                placeholder="Add a comment..." />
+                                            <input type="hidden" name="Post" value="{{ i.id }}" />
+                                            <input type="hidden" name="User" value="{{ request.user.id }}" />
+                                            <button type="submit" class="btn btn-none">
+                                                Post
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <!-- .modal-body -->
+                            </div>
+                            <!-- .modal-content -->
+                        </div>
+                        <!-- .modal-dialog -->
+                    </div>
+            <!-- End of modal -->
             {% endfor %}
             {% for i in posts %}
-            <div class="card my-2 shadow">
+            <div class="card my-2 border-0">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <strong>{{ request.user }}</strong>
                     <span class="text-muted small">2h</span>
@@ -114,6 +226,7 @@
                     </span>
                 </div>
             </div>
+            <hr>
             {% endfor %}
         </div>
 

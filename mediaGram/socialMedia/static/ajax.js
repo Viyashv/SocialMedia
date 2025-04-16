@@ -36,17 +36,19 @@ document.querySelectorAll("button[id^='likeButton_']").forEach((button) => {
       .then((response) => response.json())
       .then((data) => {
         // Update the like count
-        document.getElementById(`likeCount_${postId}`).textContent =
-          data.like_count + " likes";
+        document.querySelectorAll(`.like-count[data-id="${postId}"]`).forEach(element => {
+          element.textContent = data.like_count + " likes";
+        });
         // Update the icon based on whether the post is liked
-        const likeIcon = document.getElementById(`likeIcon_${postId}`);
-        if (data.liked) {
-          likeIcon.classList.remove("bi-heart");
-          likeIcon.classList.add("bi-heart-fill");
-        } else {
-          likeIcon.classList.remove("bi-heart-fill");
-          likeIcon.classList.add("bi-heart");
-        }
+        document.querySelectorAll(`.likeIcon[data-id="${postId}"]`).forEach(element=>{
+          if (data.liked) {
+            element.classList.remove("bi-heart");
+            element.classList.add("bi-heart-fill");
+          } else {
+            element.classList.remove("bi-heart-fill");
+            element.classList.add("bi-heart");
+          }
+        })
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -87,8 +89,9 @@ document.addEventListener("DOMContentLoaded", function () {
         .then((data) => {
           if (data.success) {
             // Update the comment count
-            const commentCountSpan = document.getElementById(`comment-count-${postId}`);
-            commentCountSpan.textContent = data.comment_count;
+            document.querySelectorAll(`.comment-count[data-id="${postId}"]`).forEach(element => {
+              element.textContent = data.comment_count;
+            })
 
             //  Append new comment to the comment section
             if(document.getElementById(`comment-section-${postId}`)){

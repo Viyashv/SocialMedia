@@ -183,7 +183,7 @@ def likePost(request):
     user  = request.user
     # print(f'User id :- {user} , post id :- {post_id}')
     post_instance = get_object_or_404(Post, id=post_id) 
-    
+    # print(f"Post Id = {post_id} , Post Instance = {post_instance}")
     # Toggle the like status
     if user in post_instance.likes.all():
         post_instance.likes.remove(user)
