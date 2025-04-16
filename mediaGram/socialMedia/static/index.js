@@ -68,3 +68,5 @@ function checkSidebarOverflow() {
 // Run overflow check on window resize and initial load.
 window.addEventListener("resize", checkSidebarOverflow);
 window.addEventListener("load", checkSidebarOverflow);
+
+
