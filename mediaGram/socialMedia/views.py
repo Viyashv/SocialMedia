@@ -163,11 +163,15 @@ def myProfiile(request):
     # print(f"User id :- {user_id}")
     user = CustomUser.objects.get(id = user_id)
     # print(f"user instances :- {user}" )
+    print(f"Login user :- {request.user.username} - Following :- {user.username}")
+    is_following = Followers.objects.filter(user=request.user.id , follower = user.id).exists()
+    print(is_following)
     context ={}
-    context["followers_count"] = user.followers.all().count()
-    context["following_count"] = user.following.all().count()
+    context["followers"] = user.following.all()
+    context["following"] = Followers.objects.filter(user = user)
     context["data"] = Post.objects.filter(user = user)
     context['user'] = user
+    context['is_following'] = is_following
     return render(request , "profile.html",context)
 
     

@@ -48,14 +48,11 @@
                 // Set the attribute and save to localStorage
                 document.documentElement.setAttribute('data-bs-theme', theme);
                 localStorage.setItem('theme', theme);
-              
-                console.log(`Theme set to: ${theme}`);
               }
               
               // Retrieve the saved theme or use a default (e.g., 'light')
                 document.addEventListener('DOMContentLoaded', () => {
                 const savedTheme = localStorage.getItem('theme') || 'light';
-                console.log("Saved theme:", savedTheme);
                 setTheme(savedTheme);
               });
         </script>

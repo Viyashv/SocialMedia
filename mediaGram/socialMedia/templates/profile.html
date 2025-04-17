@@ -23,13 +23,20 @@
                         <!-- Basic stats -->
                         <p>
                             <strong>{{data.count}}</strong> posts |
-                            <strong>{{ followers_count }}</strong>
-                            followers |
-                            <strong>{{following_count}}</strong> following
+                            <strong>{{ followers | length }}</strong>
+                            Followers |
+                            <strong>{{ following | length }}</strong> Following
                         </p>
                         <!-- Additional info or buttons -->
                         {% if request.user == user %}
                         <a href="#" class="btn btn-outline-dark btn-sm">Edit profile</a>
+                        {% endif %}
+                        {% if request.user != user %}
+                            {% if is_following %}
+                                <a href="#" class="btn btn-primary">Following</a>
+                            {% else %}
+                                <a href="#" class="btn btn-outline-dark">Follow</a>
+                            {% endif %}
                         {% endif %}
                     </div>
                 </div>
@@ -45,6 +52,7 @@
                             Posts
                         </button>
                     </li>
+                    {% if request.user == user %}
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="pills-saved-tab" data-bs-toggle="pill"
                             data-bs-target="#pills-saved" type="button" role="tab" aria-controls="pills-saved"
@@ -52,6 +60,7 @@
                             Saved
                         </button>
                     </li>
+                    {% endif %}
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="pills-tagged-tab" data-bs-toggle="pill"
                             data-bs-target="#pills-tagged" type="button" role="tab" aria-controls="pills-tagged"
@@ -167,6 +176,7 @@
                                                         </i>
                                                     </ul>
                                                 </div>
+                                                <!--  Add comment section -->
                                                 <form method="POST" novalidate
                                                     class="d-flex card-footer p-2 border border-2 border-top-dark border-bottom-0 comment-form needs-validation">
                                                     {% csrf_token %}

@@ -164,7 +164,6 @@ body {
 
 .comment-form {
     flex-shrink: 0; /* Keeps the form at its intrinsic height */
-    background-color: #fff; /* Ensure background matches the container */
     border-top: 2px solid #ddd;
 }
 .none{
